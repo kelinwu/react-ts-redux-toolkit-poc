@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { CartI } from "../../app/interfaces/Cart";
 
-interface CartStateI {
+export interface CartStateI {
   items: CartI[] | null;
   loading: boolean;
   errors?: any;
@@ -41,38 +41,17 @@ export const removeCartItem = createAsyncThunk<Object, CartI>(
 
 // reducer
 export const cartReducer = createSlice({
-  name: "cartItems",
+  name: 'items',
   initialState,
   reducers: {
-    setCartItems: (state, action: PayloadAction<CartI[]>) => {
-      state.items = action.payload;
+    addCartItem: (state, action) => {
+      state.items?.push(action.payload)
     },
-  },
-  extraReducers: (cart) => {
-    cart.addCase(getCartItems.pending, (state) => {
-      state.loading = true;
-    });
-    cart.addCase(getCartItems.fulfilled, (state, action) => {
-      state.loading = false;
-      state.items = action.payload;
-    });
-    cart.addCase(getCartItems.rejected, (state, action) => {
-      state.loading = false;
-      state.errors = action.payload;
-    });
-    cart.addCase(removeCartItem.pending, (state) => {
-      state.loading = true;
-    });
-    cart.addCase(removeCartItem.fulfilled, (state, action) => {
-      state.items?.filter((f) => f !== action.payload);
-      state.loading = false;
-    });
-    cart.addCase(removeCartItem.rejected, (state, action) => {
-      state.errors = action.payload;
-      state.loading = false;
-    });
-  },
+    removeCartItemFromState: (state, action) => {
+      state.items?.splice(state.items.indexOf(action.payload), 1)
+    }
+  }
 });
 
 export default cartReducer.reducer;
-export const { setCartItems } = cartReducer.actions;
+export const { addCartItem,removeCartItemFromState } = cartReducer.actions;

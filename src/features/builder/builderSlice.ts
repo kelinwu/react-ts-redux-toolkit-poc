@@ -14,6 +14,7 @@ const initialState: PartStateI = {
   loading: false,
   part: null,
 };
+
 // action
 export const getParts = createAsyncThunk<PartI[]>(
   "parts/getParts",
@@ -29,17 +30,6 @@ export const getParts = createAsyncThunk<PartI[]>(
   }
 );
 
-export const addPart = createAsyncThunk<Object, PartI>(
-  "parts/addPart",
-  async (data, thunkAPI) => {
-    try {
-      const response = await axios.post("blahblah/blah");
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
 // reducer
 export const builderSlice = createSlice({
   name: "parts",
@@ -64,5 +54,5 @@ export const builderSlice = createSlice({
   },
 });
 
-export default builderSlice.reducer;
 export const { setParts } = builderSlice.actions;
+export default builderSlice.reducer;
